@@ -15,4 +15,8 @@ general layout:
 		>compare crosshair to location of image
 			>elif: if overlap, plot hit @ crosshair location; else plot miss @crosshair location
 			>based on this add to running point value
+			
+			
+			
+NOTE: The file named "JS" is the file with the decibel tracker in it.
 
