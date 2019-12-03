@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- <script src="p5.js"></script>
+    <script src="p5.sound.js"></script> -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.min.js"></script>
+	
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/addons/p5.sound.min.js"></script>
+    <script src="sketch.js"></script>
+<meta charset="utf-8">
+<title>Decibels</title>
+
+
+<script>
+    let mic;
+    var amplitude;
+    var context;
+    var onAndOff = false;
+    window.onload = function() {
+        console.log("running");
+        context = new AudioContext();
+        mic = new p5.AudioIn();
+        mic.start();
+        console.log(mic.getSources());
+        console.log(mic.input);
+    }
+
+    function getNoiseLevel(){
+        micLevel = mic.getLevel();
+        console.log(micLevel * 100);
+        document.getElementById("hi").innerHTML = micLevel * 100;
+    }
+
+    function record(){
+        onAndOff = !onAndOff;
+        console.log("record()");
+        getAudioContext().resume();
+        setInterval(getNoiseLevel, 100);
+    }
+
+    
+</script>
+
+
+</head>
+
+<body>
+    <div id="hi"></div>
+    <button id="button" onclick="record()">Record</button>
+   
+</body>
+
+</html>
