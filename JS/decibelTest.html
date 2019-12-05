@@ -29,6 +29,9 @@
         micLevel = mic.getLevel();
         console.log(micLevel * 100);
         document.getElementById("hi").innerHTML = micLevel * 100;
+	if (micLevel * 100 >= 40) {
+		console.log("real loud");
+	}
     }
 
     function record(){
