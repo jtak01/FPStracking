@@ -120,9 +120,6 @@ video {
         ctx.fillRect(0, 0, c.width, c.height); 
         drawTargets();
         drawMarkers();
-        //fills canvas with gray
-        //iterate through targets and plot them in proper location
-        
   }
 
   function drawTargets(){
@@ -153,7 +150,6 @@ video {
 
   function addtoScore(point_val){
     totalscore += point_val;
-    //console.log(totalscore);
     document.getElementById("score").innerHTML = totalscore;
   }
 
@@ -161,12 +157,9 @@ video {
     var hitcount = 0; 
     for (var i = 0; i < targetarray.length; i++){
       if (newxc + 25 < targetarray[i].xc + targetarray[i].size && newxc + 25 > targetarray[i].xc && newyc + 25 > targetarray[i].yc && newyc + 25 < targetarray[i].yc + targetarray[i].size){
-        hitcount++; 
-        
+        hitcount++;
         addMarker("hit", newxc + 25, newyc + 25);
         addtoScore(targetarray[i].pointval)
-
-        //return;
       }
     }
       if (hitcount == 0){
