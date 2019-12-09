@@ -20,3 +20,6 @@ general layout:
 			
 NOTE: The file named "JS" is the file with the decibel tracker in it.
 
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/addons/p5.sound.min.js"></script>
