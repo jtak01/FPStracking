@@ -2,14 +2,15 @@ let mic;
     var amplitude;
     var context;
     var onAndOff = false;
-    // window.onload = function() {
+    //window.onload = function() {
     function setupMic(){
         console.log("running");
-        //context = new AudioContext();
+        context = new AudioContext();
         mic = new p5.AudioIn();
-        mic.start();
+        //mic.start();
         console.log(mic.getSources());
         console.log(mic.input);
+        
     }
 
     function getNoiseLevel(){
@@ -28,7 +29,8 @@ let mic;
         onAndOff = !onAndOff;
         console.log("record()");
         // context = new AudioContext();
-        getAudioContext().resume();
+        context.resume();
+        mic.start();
         //canvas.getAudioContext().resume();
         setInterval(getNoiseLevel, 200);
     }
