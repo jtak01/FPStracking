@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+<head>
+<!-- Based on https://trackingjs.com/docs.html -->
+
+<meta charset="utf-8">
+<title>Program that uses tracking.js to track a particular color with camera</title>
+
+<!-- Must download trackingjs files from https://trackingjs.com and put them where these 'script src=' statements will find them. -->
+<script src="./tracking.js-master/build/tracking-min.js"></script>
+
+
+<style>
+
+body{
+  background-color: #000000;
+  color: white;
+}
+
+video {
+  margin-left: 600px;
+  margin-top: 0px;
+  position: absolute;
+}
+</style>
+
+<script>
+/*
+ * Simple program that uses trackingjs
+ *
+ * Must run on a remote server, and access via https not http.
+ * Must download trackingjs files from https://trackingjs.com and put them where above 'script src=' statements will find them.
+ * Currently works on Chrome, but not on Safari.
+ */
+  //hardcoded array of targets 
+  var targetarray = [
+    {target_id: 1, img_id: "target", xc: 10, yc: 10, pointval: 100, size: 100}, 
+    {target_id: 2, img_id: "target", xc: 200, yc: 200, pointval: 200, size: 40}, 
+    {target_id: 2, img_id: "target", xc: 100, yc: 50, pointval: 200, size: 70}
+  ]
+  var newxc, newyc;
+
+  var v2cfactor = 1.875; //factor to take video coordinates to canvas
+  class MyCursor {
+        xPos;
+        yPos;
+        constructor(xPos, yPos, height, width) {
+            this.xPos = xPos;
+            this.yPos = yPos;
+            this.height = height; 
+            this.width = width;
+        } 
+        draw(){  
+            var c = document.getElementById("canvas");
+            var ctx = c.getContext("2d");
+            newxc = 600 - (this.xPos * v2cfactor);
+            newyc = this.yPos * v2cfactor; 
+            var img = document.getElementById("crosshair");
+            ctx.drawImage(img, newxc, newyc);
+        }
+  }
+
+/*class Targets {
+  constructor() {
+
+  }
+ }
+*/
+
+window.onload = function() {
+  //create array of targets, add targets in here? or hardcode elsewhere 
+
+  // Define my color
+  drawBackGround();
+  cursor = new MyCursor(20, 20, 20, 20);//create my cursor 
+  cursor.draw(); //registers 
+  tracking.ColorTracker.registerColor('mycolor', function(r, g, b) { return (r < 270 && g > 150 && g < 220 && b < 80)}); 
+  
+  var video = document.getElementById ('video');
+  var canvas = document.getElementById ('canvas');
+  var context = canvas.getContext ('2d');
+  var tracker = new tracking.ColorTracker ('mycolor');
+
+  tracking.track ('#video', tracker, { camera: true });
+
+  tracker.on ('track', function(event) { 
+    context.clearRect (0, 0, canvas.width, canvas.height);
+    if (event.data.length === 0) { //checks if orange object is present 
+	    document.getElementById("result").innerHTML = "(nothing found)"
+      redraw();
+    }
+    else { //recognizes orange object and displays location of crosshair and triggers redraw()
+	    document.getElementById("result").innerHTML = "" 
+	    for (var rect of event.data) { 
+	      document.getElementById ("result").innerHTML += "Found: " + rect.x + ", " + rect.y + ", " + rect.width + ", " + rect.height + "<br/>"
+          cursor.xPos = rect.x;
+          cursor.yPos = rect.y;
+          redraw();
+	    }
+    }
+  });
+
+};
+  function redraw(){
+        drawBackGround();
+        cursor.draw();
+  }
+
+  function drawBackGround(){
+        var c = document.getElementById("canvas");
+        var ctx = c.getContext("2d");
+        ctx.beginPath();
+        ctx.fillStyle = "#D3D3D3";
+        ctx.fillRect(0, 0, c.width, c.height); 
+        drawTargets();
+        //fills canvas with gray
+        //iterate through targets and plot them in proper location
+        
+  }
+
+  function drawTargets(){
+      var c = document.getElementById("canvas");
+      var ctx = c.getContext("2d");
+      for (var i = 0; i < targetarray.length; i++){
+        var target_img = document.getElementById(targetarray[i].img_id);
+        ctx.drawImage(target_img, targetarray[i].xc, targetarray[i].yc, targetarray[i].size, targetarray[i].size);
+      }  
+  }
+
+  function Shoot(){
+    for (var i = 0; i < targetarray.length; i++){
+      if (newxc < targetarray[i].xc + targetarray[i].size && newxc > target.array[i].xc){ //&& MyCursor.yPos > targetarray[i].yc && MyCursor.yPos < targetarray[i].yc + targetarray[i].size) 
+        console.log()
+        console.log("hit");
+        return;
+      }else {
+         console.log(newxc + ", " + newyc)
+          //console.log(targetarray[i])
+         console.log("miss");
+         return;
+        }
+      }
+  }
+
+
+</script>
+
+</head>
+<body>
+<p>Use <a href="http://trackingjs.com">tracking.js</a> to detect colors</p>
+
+<img id="crosshair" width="0" height="0" src="crosshair.png
+" alt="XH">
+<img id ="target" width="0" height="0" src="target.png
+" alt="TARGET">
+<video id="video" width="320" height="240" preload autoplay loop muted></video>
+<canvas id="canvas" width="600" height="500"></canvas>
+<div id="result">(nothing found)</div>
+<button onclick="Shoot()">Shoot</button>
+
+</body>
+</html>
