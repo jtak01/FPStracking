@@ -2,7 +2,7 @@ FPS Tracking
 
 general layout: 
 >shottrracker, decibelmeter
-	>These will belong in there own javascript files 
+	>These will belong in their own javascript files 
 >scene.html 
 	>page layout: canvas, live video of user in corner
 	>canvas contains an array of objects of images
